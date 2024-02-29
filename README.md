@@ -1,2 +1,5 @@
 # T-similarity
-Official Python implementation of T-similarity, a drop-in replacement to the softmax for calibrated confidence estimation in semi-supervised learning under distribution shift.
+Official implementation of [https://arxiv.org/abs/2310.14814](Leveraging Ensemble Diversity for Robust Self-Training in the Presence of Sample Selection Bias), accepted at AISTATS 2024, Valencia, Spain.
+
+## Code in development
+The code to reproduce the experiment of the paper will be available soon. 
