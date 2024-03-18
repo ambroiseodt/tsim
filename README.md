@@ -3,3 +3,7 @@ Official implementation of [Leveraging Ensemble Diversity for Robust Self-Traini
 
 ## Code in development
 The implementation of the $\mathcal{T}$-similarity and the code to reproduce the experiments of the paper will be available soon. 
+
+## Note
+In the current implementation of $\texttt{MSLA}$, the supervised loss $\ell_\mathrm{sup}$ of Eq.(1) is obtained by averaging at once over the labeled training set instead of averaging separately over the originally labeled data and the pseudo-labeled data. We find that it improves the results, accentuating the superiority of the $\mathcal{T}$-similarity over the $\texttt{softmax}$.
+
