@@ -1,8 +1,10 @@
 """
-Author: Ambroise Odonnat
-Licence: MIT
-Code to read the data and apply the labeling procedure.
+Recover data and apply the labeling procedure.
 """
+
+# Author: Ambroise Odonnat <ambroiseodonnattechnologie@gmail.com>
+#
+# License: MIT
 
 import gzip
 import os
@@ -18,44 +20,27 @@ from .sample_selection_bias import labeled_unlabeled_split
 
 
 class RealDataSet:
-    """
-    A class to recover the data and apply the labeling procedure.
+    r"""A class to recover the data and apply the labeling procedure.
 
-    Attributes
-    ----------
-    dataset_name: str
-        The name of the dataset.
-    path_data: str
-        Path to the data.
-    x: array, shape = [n_samples, dimension]
-        Input data.
-    y: array, shape = [n_samples]
-        Corresponding input labels.
-    x_train: array, shape = [n_train, dimension]
-        Training data.
-    x_test: array, shape = [n_test, dimension]
-        Test data.
-    y_train: array, shape = [n_train]
-        Training labels.
-    y_test: array, shape = [n_test]
-        Test labels.
-    labeled_idxes: list of length n_l
-        Indexes of training data to include in labeled set.
-        Here, n_l = 100 * lab_size * n_train.
-    unlabeled_idxes: list of length n_u
-        Indexes of training data to keep unlabeled.
-        Here, n_u = n_train - n_l.
-    seed: int
-        Seed for reproducibility.
+    Attributes:
+        dataset_name (str): Name of the dataset.
+        path_data (str): Path to the data.
+        x (np.array): Input data. Shape = (n_samples, dimension).
+        y (np.array): Corresponding input labels. Shape = (n_samples,).
+        x_train (np.array): Training data. Shape = (n_train, dimension).
+        x_test (np.array): Test data. Shape = (n_test, dimension).
+        y_train (np.array): Training labels. Shape = (n_train,).
+        y_test (np.array): Test labels. Shape = (n_test,).
+        labeled_idxes (list): Indexes of training data to include in labeled set.
+                            List of length n_l = 100 * lab_size * n_train.
+        unlabeled_idxes (list): Indexes of training data to keep unlabeled.
+                                List of length n_u = n_train - n_l.
+        seed (int): Seed for reproducibility.
 
-    Methods
-    ----------
-    _read_data()
-        Recover input data and labels in attributes x and y.
-    get_split(test_size, lab_size, selection_bias=False)
-        Splits the data in labeled and unlabeled training set and test set.
-        If selection_bias is True, apply sample selection bias.
-        Returns labeled and unlabeled training set, test set, and number of classes.
+    Methods:
+        _read_data(): Method to recover the data and labels in arrays.
+        get_split(test_size, lab_size, selection_bias): Splits the data in labeled and
+                                                        unlabeled training  sets, and test set.
     """
 
     def __init__(
@@ -63,15 +48,12 @@ class RealDataSet:
         dataset_name: str,
         seed=None,
     ):
+        r"""
+        Args:
+            dataset_name (str): Name of the dataset.
+            seed (int): Seed for reproducibility.
         """
-        Parameters
-        ----------
-        dataset_name: str
-            Name of the dataset.
 
-        seed: int
-            Seed for reproducibility.
-        """
         self.dataset_name = dataset_name
         self.path_data = "../data"
         self._read_data()
@@ -84,9 +66,7 @@ class RealDataSet:
         self.seed = seed
 
     def _read_data(self):
-        """
-        Recover the data.
-        """
+        r"""Method to recover the data and labels in arrays."""
         dataset_name = self.dataset_name
         if dataset_name == "codrna":
             self.x, self.y, *_ = load_svmlight_file(
@@ -143,42 +123,31 @@ class RealDataSet:
         lab_size: float,
         selection_bias=False,
     ):
-        """
-        Split the data between labeled and unlabeled training set, and test set.
+        r"""Split the data between labeled and unlabeled training set, and test set.
+
         The sample selection bias is applied at this level.
 
-        Parameters
-        ----------
-        test_size: int
-            Number of samples in the test set.
-            Sould be between 0 and n_samples.
-        lab_size: float
-            Proportion of training data to label.
-            Should be between 0.0 and 1.0.
+        Args:
+            test_size (int): Number of samples in the test set.
+                            Should be between 0 and n_samples.
+            lab_size (float): Proportion of training data to label.
+                            Should be between 0.0 and 1.0.
+            selection_bias (bool): Flag whether to apply the SSB labeling procedure (``True``)
+                                that model sample selection bias or apply the IID labeling
+                                procedure (``False``) that verifies the i.d.d. assumption.
 
-        selection_bias: bool
-            If True, it applies the sample selection bias (SSB) labeling procedure.
-            Otherwise, it applies the usual labeling procedure (IID) that verifies the i.i.d assumption.
-
-        Returns
-        ----------
-        x_l: array, shape = [n_l, dimension]
-            Labeled training data.
-        x_u: array, shape = [n_u, dimension]
-            Unlabeled training data.
-        y_l: array, shape = [n_l]
-            Labels of training labeled data.
-        y_u: array, shape = [n_u]
-            Labels of training unlabeled data.
-            Not used for training but useful to estimate the transductive error.
-        self.x_test: array, shape = [n_test, dimension]
-            Test data.
-        self.y_test: array, shape = [n_test]
-            Corresponding test labels.
-        num_classes: int
-            Number of classes.
+        Returns:
+            x_l (np.array): Labeled training data. Shape = (n_l, dimension).
+            x_u (np.array): Unlabeled training data. Shape = (n_u, dimension).
+            y_l (np.array): Labels of training labeled data. Shape = (n_l,).
+            y_u (np.array): Labels of training unlabeled data. Shape = (n_u,).
+                            Not used for training, only to estimate the transductive error.
+            self.x_test (np.array): Test data. Shape = (n_test, dimension).
+            self.y_test (np.array): Corresponding test labels. Shape = (n_test).
+            n_classes (int): Number of classes.
         """
-        num_classes = len(list(set(self.y)))
+
+        n_classes = len(list(set(self.y)))
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
             self.x, self.y, test_size=test_size, random_state=self.seed, stratify=self.y
         )
@@ -219,35 +188,29 @@ class RealDataSet:
             y_u,
             self.x_test,
             self.y_test,
-            num_classes,
+            n_classes,
         )
 
 
 class MNISTLoader:
-    """
-    A class to load MNIST data.
+    r"""A class to load MNIST data.
 
-    Attributes
-    ----------
-    images: array, shape = [n_samples, 28, 28]
-        Data.
-    labels: array, shape = [n_samples]
-        Corresponding labels.
-    Methods
-    ----------
-    _extract_images(source)
-        Recover input data from source.
-    _extract_labels(source)
-        Recover corresponding labels.
+    Attributes:
+        images (np.array): Data. Shape = (n_samples, 28, 28).
+        labels (np.array): Corresponding labels. Shape = (n_samples,).
+
+    Methods:
+        _extract_images(source): Recover input data from source.
+        _extract_labels(source): Recover corresponding labels.
     """
 
     def __init__(self, path_data="../data"):
-        """
-        Parameters:
+        r"""
+        Args:
         ----------
-        path_data: str
-            Path to data.
+        path_data (str): Path to data.
         """
+
         self.base_path = os.path.join(path_data, "MNIST/raw/")
         train_images = self._extract_images(source="train")
         test_images = self._extract_images(source="t10k")
@@ -259,20 +222,16 @@ class MNISTLoader:
         self.labels = labels
 
     def _extract_images(self, source: str):
-        """
-        Recover data from source.
+        r"""Recover data from source.
 
-        Parameters:
-        ----------
-        source: str
-            if source is "train", recover training data.
-            If source is "t10k", recover test data.
+        Args:
+            source (str): If source is "train", recover training data.
+                        If source is "t10k", recover test data.
 
         Returns:
-        ----------
-        images: array, shape = [n_samples, 28, 28]
-            Input data.
+            images (array): Input data. Shape = (n_samples, 28, 28).
         """
+
         with gzip.open(self.base_path + source + "-images-idx3-ubyte.gz", "r") as f:
             # First 4 bytes is a magic number
             _ = int.from_bytes(f.read(4), "big")
@@ -295,20 +254,16 @@ class MNISTLoader:
             return images
 
     def _extract_labels(self, source: str):
-        """
-        Recover labels from source.
+        r"""Recover labels from source.
 
-        Parameters:
-        ----------
-        source: str
-            if source is "train", recover training labels.
-            If source is "t10k", recover test labels.
+        Args:
+            source (str): If source is "train", recover training labels.
+                      If source is "t10k", recover test labels.
 
         Returns:
-        ----------
-        labels: array, shape = [n_samples]
-            Input labels.
+            labels (array): Input labels. Shape = (n_samples,).
         """
+
         with gzip.open(self.base_path + source + "-labels-idx1-ubyte.gz", "r") as f:
             # First 4 bytes is a magic number
             _ = int.from_bytes(f.read(4), "big")
@@ -325,22 +280,15 @@ class MNISTLoader:
 
 
 def _read_gz_dataset(path_data: str, dataset_name: str):
-    """
-    Recover data and labels.
+    r"""Recover data and labels.
 
-    Parameters:
-    ----------
-    dataset_name: str
-        The name of the dataset.
-    path_data: str
-        Path to the data.
+    Args:
+        dataset_name (str): Name of the dataset.
+        path_data (str): Path to the data.
 
     Returns:
-    ----------
-    x: array, shape = [n_samples, dimension]
-        Input data.
-    y: array, shape = [n_samples]
-        Corresponding input labels.
+        x (np.array): Input data. Shape = (n_samples, dimension).
+        y (np.array): Corresponding input labels. Shape = (n_samples,).
     """
 
     x = np.loadtxt(os.path.join(path_data, dataset_name, dataset_name + "-x.gz"))
@@ -350,24 +298,17 @@ def _read_gz_dataset(path_data: str, dataset_name: str):
 
 
 def _format(x: np.array, y: np.array, classes: np.array):
-    """
-    Format data with labels equal to [0, ..., num_classes-1].
+    r"""Format data with labels equal to [0, ..., n_classes-1].
 
-    Parameters:
-    ----------
-    x: array, shape = [n_samples, dimension]
-        Input data.
-    y: array, shape = [n_samples]
-        Corresponding input labels.
-    classes: array, shape = [num_classes]
-        Original set of labels.
+    Args:
+        x (np.array): Input data. Shape = (n_samples, dimension).
+        y (np.array): Corresponding input labels. Shape = (n_samples,).
+        classes (np.array): Original set of labels. Shape = (n_classes,).
 
     Returns:
-    ----------
-    x: array, shape = [n_samples, dimension]
-        Input data.
-    y: array, shape = [n_samples]
-        Corresponding input labels in format [0, ..., num_classes-1].
+        x (np.array): Input data. Shape = (n_samples, dimension).
+        y (np.array): Corresponding input labels in format [0, ..., n_classes-1].
+                      Shape = (n_samples,).
     """
 
     x = np.asarray(x)

@@ -1,9 +1,11 @@
 """
-Author: Ambroise Odonnat
-Licence: MIT
-Code to apply sample selection bias in the labeling procedure.
+Labeling procedure to split between labeled and unlabeled
+training sets, and test set.
 """
 
+# Author: Ambroise Odonnat <ambroiseodonnattechnologie@gmail.com>
+#
+# License: MIT
 import numpy as np
 
 from sklearn.decomposition import PCA
@@ -19,37 +21,27 @@ def labeled_unlabeled_split(
     selection_bias: bool,
     seed: int,
 ):
-    """
-    Apply the labeling procedure on training data.
-    If selection bias is True, apply sample selection bias.
-    Otherwise, labeled data are drawn uniformly so that classes are balanced.
-    Note that the resulting subsets are **deterministic** with the same random seed.
+    r"""Apply the labeling procedure on training data.
 
-    Parameters
-    ----------
-    dataset_name: str
-        Name of the dataset.
-    x: array, shape = [n_train, dimension]
-        Training data.
-    y: array, shape = [n_train]
-        Corresponding training labels.
-    lab_size: float
-        Proportion of training data to label.
-        Should be between 0.0 and 1.0.
-    selection_bias: bool
-        If True, apply PCA sample selection bias.
-        Otherwise, labeled data are drawn uniformly so that classes are balanced.
-    seed: int
-        Seed for reproducibility.
+    If selection_bias is True, apply sample selection bias.
+    Otherwise, labeled data are drawn uniformly so that the classes are balanced.
 
-    Returns
-    ----------
-    labeled_idxes: list of length n_l
-        Indexes of training data to include in labeled set.
-        Here, n_l = 100 * lab_size * n_train.
-    unlabeled_idxes: list of length n_u
-        Indexes of training data to keep unlabeled.
-        Here, n_u = n_train - n_l.
+    Args:
+        dataset_name (str): Name of the dataset.
+        x (np.array): Input training data. Shape = (n_train, dimension).
+        y (np.array): Corresponding training labels. Shape = (n_train,).
+        lab_size (float): Proportion of training data to label.
+                            Should be between 0.0 and 1.0.
+        selection_bias (bool): Flag whether to apply the SSB labeling procedure (``True``)
+                                that model sample selection bias or apply the IID labeling
+                                procedure (``False``) that verifies the i.d.d. assumption.
+        seed (int): Seed for reproducibility.
+
+    Returns:
+        labeled_idxes (list): Indexes of training data to include in labeled set.
+                            List of length n_l = 100 * lab_size * n_train.
+        unlabeled_idxes (list): Indexes of training data to keep unlabeled.
+                                List of length n_u = n_train - n_l.
     """
 
     if lab_size == 1.0:
@@ -111,28 +103,21 @@ def _balanced_split(
     seed: int,
     shuffle_data=True,
 ):
-    """
-    Apply IID labeling procedure on training data.
+    r"""Apply IID labeling procedure on training data.
+
     Labeled data are drawn uniformly so that classes are balanced.
 
-    Parameters
-    ----------
-    y: array, shape = [n_train]
-        Training labels.
-    lab_size: float
-        Proportion of training data to label.
-        Should be strictly between 0.0 and 1.0.
-    seed: int
-        Seed for reproducibility.
+    Args:
+        y (np.array): Training labels. Shape = (n_train,).
+        lab_size (float): Proportion of training data to label.
+                            Should be between 0.0 and 1.0.
+        seed (int): Seed for reproducibility.
 
-    Returns
-    ----------
-    labeled_idxes: list of length n_l
-        Indexes of training data to include in labeled set.
-        Here, n_l = 100 * lab_size * n_train.
-    unlabeled_idxes: list of length n_u
-        Indexes of training data to keep unlabeled.
-        Here, n_u = n_train - n_l.
+    Returns:
+        labeled_idxes (list): Indexes of training data to include in labeled set.
+                            List of length n_l = 100 * lab_size * n_train.
+        unlabeled_idxes (list): Indexes of training data to keep unlabeled.
+                                List of length n_u = n_train - n_l.
     """
 
     # Define random state
@@ -173,35 +158,26 @@ def _pca_split(
     seed: int,
     shuffle_data=True,
 ):
-    """
-    Apply SSB labeling procedure on training data.
-    Labeled data are drawn with a probability that depends on
-    the value of their projection on the first principal component (PC1).
-    This is an instance of sample selection bias where the distribution of classes is preserved.
+    r"""Apply SSB labeling procedure on training data.
 
-    Parameters
-    ----------
-    y: array, shape = [n_train, dimension]
-        Training data.
-    y: array, shape = [n_train]
-        Corresponding training labels.
-    lab_size: float
-        Proportion of training data to label.
-        Should be strictly between 0.0 and 1.0.
-    ratio: float
-        Hyperparameter to model the probability of labeled a training sample.
-        Should be positive.
-    seed: int
-        Seed for reproducibility.
+    Labeled data are drawn with a probability that depends on the absolute value of
+    their projection on the first principal component (PC1). This is an instance of
+    sample selection bias where the distribution of classes is preserved.
 
-    Returns
-    ----------
-    labeled_idxes: list of length n_l
-        Indexes of training data to include in labeled set.
-        Here, n_l = 100 * lab_size * n_train.
-    unlabeled_idxes: list of length n_u
-        Indexes of training data to keep unlabeled.
-        Here, n_u = n_train - n_l.
+    Args:
+        x (np.array): Input training data. Shape = (n_train, dimension).
+        y (np.array): Corresponding training labels. Shape = (n_train,).
+        lab_size (float): Proportion of training data to label.
+                            Should be between 0.0 and 1.0.
+        ratio (float): Hyperparameter to model the probability of labeling
+                    a training sample. It should be positive.
+        seed (int): Seed for reproducibility.
+
+    Returns:
+        labeled_idxes (list): Indexes of training data to include in labeled set.
+                            List of length n_l = 100 * lab_size * n_train.
+        unlabeled_idxes (list): Indexes of training data to keep unlabeled.
+                                List of length n_u = n_train - n_l.
     """
     assert lab_size < 1, "Too many labels selected"
 
