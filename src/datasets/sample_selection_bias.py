@@ -43,7 +43,6 @@ def labeled_unlabeled_split(
         unlabeled_idxes (list): Indexes of training data to keep unlabeled.
                                 List of length n_u = n_train - n_l.
     """
-
     if lab_size == 1.0:
         print("Supervised task: unlabeled set is empty")
         labeled_idxes, unlabeled_idxes = np.arange(len(x)), []
@@ -119,7 +118,6 @@ def _balanced_split(
         unlabeled_idxes (list): Indexes of training data to keep unlabeled.
                                 List of length n_u = n_train - n_l.
     """
-
     # Define random state
     rng = np.random.default_rng(seed)
 
@@ -158,7 +156,7 @@ def _pca_split(
     seed: int,
     shuffle_data=True,
 ):
-    r"""Apply SSB labeling procedure on training data.
+    r"""Apply SSB labeling procedure on training data following [1].
 
     Labeled data are drawn with a probability that depends on the absolute value of
     their projection on the first principal component (PC1). This is an instance of
@@ -178,6 +176,12 @@ def _pca_split(
                             List of length n_l = 100 * lab_size * n_train.
         unlabeled_idxes (list): Indexes of training data to keep unlabeled.
                                 List of length n_u = n_train - n_l.
+
+    References
+    ----------
+    [1] A. Odonnat, V. Feofanov, I. Redko. Leveraging Ensemble Diversity
+        for Robust Self-Training in the presence of Sample Selection Bias.
+        International Conference on Artifical Intelligence and Statistics (AISTATS), 2024
     """
     assert lab_size < 1, "Too many labels selected"
 
