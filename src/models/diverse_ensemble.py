@@ -24,7 +24,7 @@ from torch import nn
 from torch.utils.data import DataLoader
 
 from .architectures import EnsembleClassifier
-from .tsim import Tsimilarity, DiversityLoss
+from .tsim import Tsimilarity, ClasswiseTsimilarity, DiversityLoss
 from .utils import EmptyDataset, LabeledDataset, UnlabeledDataset, ForeverDataIterator
 
 
@@ -62,8 +62,10 @@ class DiverseEnsembleMLP:
         self.verbose = verbose
         self.network = None
         self.optimizer = None
-        self.supervised_loss = None
-        self.diversity_loss = None
+        self.supervised_loss = nn.CrossEntropyLoss()
+        self.diversity_loss = DiversityLoss()
+        self.t_similarity_function = Tsimilarity().to(self.device)
+        self.classwise_t_similarity_function = ClasswiseTsimilarity().to(self.device)
 
     def fit(self, x_l: np.array, y_l: np.array, x_u: np.array):
 
@@ -93,8 +95,8 @@ class DiverseEnsembleMLP:
         )
 
         # Loss
-        self.supervised_loss = nn.CrossEntropyLoss().to(self.device)
-        self.diversity_loss = DiversityLoss().to(self.device)
+        self.supervised_loss = self.supervised_loss.to(self.device)
+        self.diversity_loss = self.diversity_loss.to(self.device)
 
         # Dataloader
         self.batch_size_l = min(x_l.shape[0], self.batch_size_l)
@@ -170,6 +172,7 @@ class DiverseEnsembleMLP:
         with torch.no_grad():
             output_pred_head, _ = self.network(x)
             out = output_pred_head.cpu().numpy()
+
         return out.argmax(axis=-1)
 
     def predict_proba(self, x: np.array):
@@ -177,12 +180,18 @@ class DiverseEnsembleMLP:
         with torch.no_grad():
             output_pred_head, _ = self.network(x)
             out = output_pred_head.cpu().numpy()
+
         return softmax(out, axis=-1)
 
     def predict_t_similarity(self, x: np.array, classwise=False):
         x = torch.FloatTensor(x).to(self.device)
-        tsimilarity_function = Tsimilarity(classwise=classwise).to(self.device)
+        if classwise:
+            t_similarity_function = self.classwise_t_similarity_function
+        else:
+            t_similarity_function = self.t_similarity_function
+        t_similarity_function = t_similarity_function.to(self.device)
         with torch.no_grad():
             _, outputs_ensemble_heads = self.network(x)
-            tsim = tsimilarity_function(*outputs_ensemble_heads)
+            tsim = t_similarity_function(*outputs_ensemble_heads)
+
         return tsim.cpu().numpy()
