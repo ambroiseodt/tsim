@@ -119,7 +119,6 @@ class EnsembleClassifier(nn.Module):
         self, input_shape: tuple, n_classes: int, n_classifiers=5, backbone=None
     ):
         r"""
-
         Args:
             input_shape (tuple): Dimension of the input. For MNIST data, we have:
                                     - input_shape = (784, ) if inputs are flattened;
