@@ -1,5 +1,5 @@
 r"""
-Neural networks architectures and ensemle classifier.
+Neural networks architectures and ensemble classifier.
 """
 
 # Author: Ambroise Odonnat <ambroiseodonnattechnologie@gmail.com>
@@ -39,7 +39,7 @@ class MLP(nn.Module):
 
     def forward(self, x: torch.Tensor):
         r"""
-        Flatten inputs and apply the neural network.
+        Flatten the inputs and apply the neural network.
 
         Args:
             x (torch.Tensor): Input tensor. Shape = (batch_size, dimension).
@@ -83,7 +83,7 @@ class MLPfixed(nn.Module):
 
     def forward(self, x: torch.Tensor):
         r"""
-        Flatten inputs and apply the neural network.
+        Flatten the inputs and apply the neural network.
 
         Args:
             x (torch.Tensor): Input tensor. Shape = (batch_size, dimension).
