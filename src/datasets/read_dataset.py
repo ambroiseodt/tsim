@@ -53,7 +53,6 @@ class RealDataSet:
             dataset_name (str): Name of the dataset.
             seed (int): Seed for reproducibility.
         """
-
         self.dataset_name = dataset_name
         self.path_data = "../data"
         self._read_data()
@@ -146,7 +145,6 @@ class RealDataSet:
             self.y_test (np.array): Corresponding test labels. Shape = (n_test).
             n_classes (int): Number of classes.
         """
-
         n_classes = len(list(set(self.y)))
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
             self.x, self.y, test_size=test_size, random_state=self.seed, stratify=self.y
@@ -207,10 +205,8 @@ class MNISTLoader:
     def __init__(self, path_data="../data"):
         r"""
         Args:
-        ----------
-        path_data (str): Path to data.
+            path_data (str): Path to data.
         """
-
         self.base_path = os.path.join(path_data, "MNIST/raw/")
         train_images = self._extract_images(source="train")
         test_images = self._extract_images(source="t10k")
@@ -231,7 +227,6 @@ class MNISTLoader:
         Returns:
             images (array): Input data. Shape = (n_samples, 28, 28).
         """
-
         with gzip.open(self.base_path + source + "-images-idx3-ubyte.gz", "r") as f:
             # First 4 bytes is a magic number
             _ = int.from_bytes(f.read(4), "big")
@@ -263,7 +258,6 @@ class MNISTLoader:
         Returns:
             labels (array): Input labels. Shape = (n_samples,).
         """
-
         with gzip.open(self.base_path + source + "-labels-idx1-ubyte.gz", "r") as f:
             # First 4 bytes is a magic number
             _ = int.from_bytes(f.read(4), "big")
@@ -290,7 +284,6 @@ def _read_gz_dataset(path_data: str, dataset_name: str):
         x (np.array): Input data. Shape = (n_samples, dimension).
         y (np.array): Corresponding input labels. Shape = (n_samples,).
     """
-
     x = np.loadtxt(os.path.join(path_data, dataset_name, dataset_name + "-x.gz"))
     y = np.loadtxt(os.path.join(path_data, dataset_name, dataset_name + "-y.gz"))
 
@@ -310,11 +303,11 @@ def _format(x: np.array, y: np.array, classes: np.array):
         y (np.array): Corresponding input labels in format [0, ..., n_classes-1].
                       Shape = (n_samples,).
     """
-
     x = np.asarray(x)
     new_classes = np.arange(len(classes))
     y_new = np.copy(y).astype(int)
     for i, k in enumerate(classes):
         y_new[y == k] = new_classes[i]
     y = np.array(y_new)
+
     return x, y
