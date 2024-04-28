@@ -56,7 +56,6 @@ class MLP(nn.Module):
     @property
     def out_features(self) -> int:
         r"""Return the dimension of the neural network's embedding."""
-
         return self._out_features
 
 
@@ -70,7 +69,6 @@ class MLPfixed(nn.Module):
                                     - input_shape = (784, ) if inputs are flattened;
                                     - input_shape = (1, 28, 28) otherwise.
         """
-
         super().__init__()
         input_dim = np.array(input_shape).prod()
 
@@ -94,15 +92,14 @@ class MLPfixed(nn.Module):
             out (torch.Tensor): Neural network's embedding to be fed to the classifier.
                               Shape = (batch_size, hidden_dim).
         """
-
         x = torch.flatten(x, 1)
         out = self.features(x)
+
         return out
 
     @property
     def out_features(self) -> int:
         r"""Return the dimension of the neural network's embedding."""
-
         return self._out_features
 
 
@@ -132,7 +129,6 @@ class EnsembleClassifier(nn.Module):
             backbone (optional, nn.Module): Backbone neural network to obtain feature embeddings.
                                             Defaults to None.
         """
-
         super().__init__()
         self.n_classifiers = n_classifiers
         self.n_classes = n_classes
@@ -164,11 +160,10 @@ class EnsembleClassifier(nn.Module):
             x (torch.Tensor): Input tensor. Shape = (batch_size, dimension).
 
         Returns:
-            output_pred_head, outputs_ensemble_heads (Tuple): Predictions of the model.
-                output_pred_head (torch.Tensor): Output of the prediction head.
-                outputs_ensemble_heads (list of torch.Tensors): Contains the outputs of the ensemble heads.
+            output_pred_head, outputs_ensemble_heads (Tuple):
+                - output_pred_head (torch.Tensor): Output of the prediction head.
+                - outputs_ensemble_heads (list of torch.Tensors): Outputs of the ensemble heads.
         """
-
         f = self.backbone(x)
         f_clone = f.detach().clone()
         output_pred_head = self.pred_head(f)
