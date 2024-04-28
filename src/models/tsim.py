@@ -38,7 +38,7 @@ class Tsimilarity(nn.Module):
     def forward(self, *outputs):
         r"""
         Args:
-            *outputs (unpacked list of torch.Tensor): Unpacked list of the ensemble outputs.
+            *outputs (unpacked list of torch.Tensor): Unpacked list of the ensemble's outputs.
                                                       Each tensor is of shape (batch_size, n_classes).
 
         Returns:
@@ -84,7 +84,7 @@ class ClasswiseTsimilarity(nn.Module):
     def forward(self, *outputs):
         r"""
         Args:
-            *outputs (unpacked list of torch.Tensor): Unpacked list of the ensemble outputs.
+            *outputs (unpacked list of torch.Tensor): Unpacked list of the ensemble's outputs.
                                                       Each tensor is of shape (batch_size, n_classes).
 
         Returns:
