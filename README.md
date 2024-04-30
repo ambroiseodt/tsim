@@ -9,7 +9,7 @@ We provide the implementation of the **$\mathcal{T}$-similarity**, a drop-in rep
 </p>
 
 ## What is included?
-We provide the implementation of the following methods.
+We provide the following implementions.
 
 ### Labeling procedure
 Sample selection bias (SSB) occurs when data labeling is subject to constraints resulting in a distribution mismatch between labeled and unlabeled data.
@@ -33,14 +33,14 @@ We provide the PyTorch implementation of the $\mathcal{T}$-similarity and the co
 - In practice, we use $M=5$ heads resulting in lightweight and fast training;
 - Compatible to any SSL methods using neural networks as backbones.
 
-### Notebooks to reproduce the figure from the [paper](https://arxiv.org/pdf/2310.14814)
-- Overview of the method (Figure 1)
-- Visualization of the sample selection bias (Figure 3)
-- $\mathcal{T}$-similarity corrects overconfidence of the softmax (Figure 6)
+## Examples
+We provide several notebooks in `notebooks/` to take in hand the implementation and reproduce the figures of the [paper](https://arxiv.org/pdf/2310.14814):
+- `plot_intro_figure.ipynb`: Overview of the method (Figure 1)
+- `plot_sample_selection_bias.ipynb`: Visualization of the sample selection bias (Figure 3)
+- `plot_calibration.ipynb`: $\mathcal{T}$-similarity corrects overconfidence of the softmax (Figure 6)
 
 ## Coming soon
-The code is still in development and we will add the following points very soon:
-- Clean requirements.txt
+The code is still in development and we will add the following components very soon:
 - Visualization of ECE for softmax and $\mathcal{T}$-similarity (Figure 5)
 - Self-training algorithms
 
