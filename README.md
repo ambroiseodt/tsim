@@ -34,10 +34,61 @@ We provide the PyTorch implementation of the $\mathcal{T}$-similarity and the co
 - Compatible to any SSL methods using neural networks as backbones.
 
 ## Examples
-We provide several notebooks in `notebooks/` to take in hand the implementation and reproduce the figures of the [paper](https://arxiv.org/pdf/2310.14814):
+We provide demos in `notebooks/` to take in hand the implementation and reproduce the figures of the [paper](https://arxiv.org/pdf/2310.14814):
 - `plot_intro_figure.ipynb`: Overview of the method (Figure 1)
 - `plot_sample_selection_bias.ipynb`: Visualization of the sample selection bias (Figure 3)
 - `plot_calibration.ipynb`: $\mathcal{T}$-similarity corrects overconfidence of the softmax (Figure 6)
+
+The code below (in `plot_calibration.ipynb`) gives an example of how to train the model we introduced with $5$ ensemble heads:
+```python
+import sys
+sys.path.append("..")
+from src.datasets.read_dataset import RealDataSet
+from src.models.diverse_ensemble import DiverseEnsembleMLP
+
+def get_base_classier(
+    dataset_name,
+    seed,
+    nb_lab_samples_per_class,
+    selection_bias,
+    num_epochs,
+    gamma,
+):
+    # Fixed params
+    test_size = 0.25
+    n_iters = 100
+    n_classifiers = 5
+
+    # Data split
+    dataset = RealDataSet(dataset_name=dataset_name, seed=seed)
+
+    # Percentage of labeled data
+    num_classes = len(list(set(dataset.y)))
+    ratio = num_classes / ((1 - test_size) * len(dataset.y))
+    lab_size = nb_lab_samples_per_class * ratio
+
+    # Split
+    x_l, x_u, y_l, y_u, x_test, y_test, n_classes = dataset.get_split(
+        test_size=test_size, lab_size=lab_size, selection_bias=selection_bias
+    )
+
+    # Define base classifier
+    base_classifier = DiverseEnsembleMLP(
+        num_epochs=num_epochs,
+        gamma=gamma,
+        n_iters=n_iters,
+        n_classifiers=n_classifiers,
+        device="cpu",
+        verbose=False,
+        random_state=seed,
+    )
+
+    # Train
+    base_classifier.fit(x_l, y_l, x_u)
+
+    return base_classifier, x_u, y_u
+```
+
 
 ## Coming soon
 The code is still in development and we will add the following components very soon:
