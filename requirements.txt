@@ -1,0 +1,7 @@
+# Common dependencies with python=3.8.16
+matplotlib
+numpy
+scipy
+scikit-learn
+seaborn
+torch
