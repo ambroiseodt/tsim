@@ -39,34 +39,32 @@ We provide demos in `notebooks/` to take in hand the implementation and reproduc
 - `plot_sample_selection_bias.ipynb`: Visualization of the sample selection bias (Figure 3)
 - `plot_calibration.ipynb`: $\mathcal{T}$-similarity corrects overconfidence of the softmax (Figure 6)
 
-The code below (in `plot_calibration.ipynb`) gives an example of how to train the model we introduced with $5$ ensemble heads:
+The code below (in `demo.ipynb`) gives an example of how to train the architecture introduced above:
 ```python
 import sys
 sys.path.append("..")
 from src.datasets.read_dataset import RealDataSet
 from src.models.diverse_ensemble import DiverseEnsembleMLP
 
-def get_base_classier(
-    dataset_name,
-    seed,
-    nb_lab_samples_per_class,
-    selection_bias,
-    num_epochs,
-    gamma,
-):
-    # Fixed params
-    test_size = 0.25
-    n_iters = 100
-    n_classifiers = 5
+dataset_name = "mnist"
+gamma = 1
+n_classifiers = 5
+seed = 0
+nb_lab_samples_per_class = 10
+test_size = 0.25
+num_epochs = 5
+n_iters = 100
 
-    # Data split
-    dataset = RealDataSet(dataset_name=dataset_name, seed=seed)
+# Data split
+dataset = RealDataSet(dataset_name=dataset_name, seed=seed)
 
-    # Percentage of labeled data
-    num_classes = len(list(set(dataset.y)))
-    ratio = num_classes / ((1 - test_size) * len(dataset.y))
-    lab_size = nb_lab_samples_per_class * ratio
+# Percentage of labeled data
+num_classes = len(list(set(dataset.y)))
+ratio = num_classes / ((1 - test_size) * len(dataset.y))
+lab_size = nb_lab_samples_per_class * ratio
 
+real_biases = ["IID", "SSB"]
+for i, selection_bias in enumerate([False, True]):
     # Split
     x_l, x_u, y_l, y_u, x_test, y_test, n_classes = dataset.get_split(
         test_size=test_size, lab_size=lab_size, selection_bias=selection_bias
@@ -85,8 +83,13 @@ def get_base_classier(
 
     # Train
     base_classifier.fit(x_l, y_l, x_u)
-
-    return base_classifier, x_u, y_u
+    test_acc = (base_classifier.predict(x_test) == y_test).mean() * 100
+    tsim = base_classifier.predict_t_similarity(x_test).mean()
+    print(f"Selection bias: {real_biases[i]}")
+    print(
+        f"The supervised prediction head achieves an accuracy of {test_acc:.3}% on the test set."
+    )
+    print(f"The average T-similarity on the test set is {tsim:.3}. \n")
 ```
 
 ## Modules
