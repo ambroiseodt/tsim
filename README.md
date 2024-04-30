@@ -25,7 +25,7 @@ We illustrate below the two types of labeling considered in our [paper](https://
 We provide the PyTorch implementation of the $\mathcal{T}$-similarity and the corresponding diversity loss. To combine prediction and confidence estimation, e.g., for self-training, we introduce the lightweight architecture shown below. In terms of implementation, it has the form of an sklearn base_estimator with fit, predict, and predict_proba methods and we add a predict_t_similarity method.
 
 <p align="center">
-  <img src="https://github.com/ambroiseodt/tsim/assets/64415312/797cdfff-0621-420f-bc65-100a50f140cb" width="400">
+  <img src="https://github.com/ambroiseodt/tsim/assets/64415312/797cdfff-0621-420f-bc65-100a50f140cb" width="350">
 </p>
 
 #### *Key features*
