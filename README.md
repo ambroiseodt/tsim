@@ -9,7 +9,7 @@ We provide the implementation of the **$\mathcal{T}$-similarity**, a drop-in rep
 </p>
 
 ## What is included?
-We provide the following implementions.
+We provide the following implementations.
 
 ### Labeling procedure
 Sample selection bias (SSB) occurs when data labeling is subject to constraints resulting in a distribution mismatch between labeled and unlabeled data.
@@ -89,24 +89,22 @@ def get_base_classier(
     return base_classifier, x_u, y_u
 ```
 
-
-## Coming soon
-The code is still in development and we will add the following components very soon:
-- Visualization of ECE for softmax and $\mathcal{T}$-similarity (Figure 5)
-- Self-training algorithms
-
 ## Modules
 This package consists of several key modules:
 - `notebooks/`: Contains the notebooks to reproduce the figures from the paper;
 - `data/`: Contains the datasets used in our experiments;
 - `src/datasets`: Contains the functions to load datasets and perform the labeling procedure;
-- `src/models/`: Contains all the functions to train diverse ensemble with the $\mathcal{T}$-similarity
+- `src/models/`: Contains all the functions to train diverse ensembles with the $\mathcal{T}$-similarity
+
+## Coming soon
+> [!WARNING]
+> The code is still in development and we will add the following components very soon:
+- Visualization of ECE for softmax and $\mathcal{T}$-similarity (Figure 5)
+- Self-training algorithms
+- Extended requirements.txt
 
 ## Installation
-> [!WARNING]
-> A clean requirements.txt file will be added soon.
-
-To get started with $\mathcal{T}$-similarity, clone this repository and install the required packages.
+To get started with the $\mathcal{T}$-similarity, clone this repository and install the required packages using:
 
 ```bash
 git clone https://github.com/ambroiseodt/tsim.git
