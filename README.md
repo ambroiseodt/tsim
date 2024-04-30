@@ -54,6 +54,7 @@ nb_lab_samples_per_class = 10
 test_size = 0.25
 num_epochs = 5
 n_iters = 100
+selection_bias = True
 
 # Data split
 dataset = RealDataSet(dataset_name=dataset_name, seed=seed)
@@ -63,33 +64,25 @@ num_classes = len(list(set(dataset.y)))
 ratio = num_classes / ((1 - test_size) * len(dataset.y))
 lab_size = nb_lab_samples_per_class * ratio
 
-real_biases = ["IID", "SSB"]
-for i, selection_bias in enumerate([False, True]):
-    # Split
-    x_l, x_u, y_l, y_u, x_test, y_test, n_classes = dataset.get_split(
-        test_size=test_size, lab_size=lab_size, selection_bias=selection_bias
-    )
 
-    # Define base classifier
-    base_classifier = DiverseEnsembleMLP(
-        num_epochs=num_epochs,
-        gamma=gamma,
-        n_iters=n_iters,
-        n_classifiers=n_classifiers,
-        device="cpu",
-        verbose=False,
-        random_state=seed,
-    )
+  # Split
+  x_l, x_u, y_l, y_u, x_test, y_test, n_classes = dataset.get_split(
+      test_size=test_size, lab_size=lab_size, selection_bias=selection_bias
+  )
 
-    # Train
-    base_classifier.fit(x_l, y_l, x_u)
-    test_acc = (base_classifier.predict(x_test) == y_test).mean() * 100
-    tsim = base_classifier.predict_t_similarity(x_test).mean()
-    print(f"Selection bias: {real_biases[i]}")
-    print(
-        f"The supervised prediction head achieves an accuracy of {test_acc:.3}% on the test set."
-    )
-    print(f"The average T-similarity on the test set is {tsim:.3}. \n")
+  # Define base classifier
+  base_classifier = DiverseEnsembleMLP(
+      num_epochs=num_epochs,
+      gamma=gamma,
+      n_iters=n_iters,
+      n_classifiers=n_classifiers,
+      device="cpu",
+      verbose=False,
+      random_state=seed,
+  )
+
+  # Train
+  base_classifier.fit(x_l, y_l, x_u)
 ```
 
 ## Modules
