@@ -17,10 +17,10 @@ We illustrate below the two types of labeling considered in our [paper](https://
   <img src="https://github.com/ambroiseodt/tsim/assets/64415312/ebb2980d-b4e8-49b2-8f45-b8e1be8cea1c" width="400">
 </p>
 
-### $\mathcal{T}$-similarity and diversity loss
-The confidence measure and corresponding diversity loss are implemented as nn.Module which makes them easy to use, e.g., to train the architecture below.
+### Confidence measure and diversity loss
+The $\mathcal{T}$-similarity and the corresponding diversity loss are implemented as nn.Module which makes them easy to use, e.g., to train the architecture below.
 
-### Architecture for self-training with the $\mathcal{T}$-similarity
+### Learning with the $\mathcal{T}$-similarity
 To combine prediction and confidence estimation, e.g., for self-training, we prpropose the lightweight architecture shown below. To train it, we provide a sklearn-ish base_estimator with fit, predict, predict_proba methods and the novel predict_t_similarity method.
 
 <p align="center">
