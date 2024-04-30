@@ -2,7 +2,7 @@
 **This is the official implementation of [Leveraging Ensemble Diversity for Robust Self-Training in the Presence of Sample Selection Bias](https://arxiv.org/pdf/2310.14814), AISTATS 2024.**
 
 ## Overview
-This package implements the **$\mathcal{T}$-similarity**, a drop-in replacement of the softmax for confidence estimation under distribution shifts. This novel confidence measure is build upon a diverse ensemble of linear classifiers and corrects the softmax overconfidence while being calibrated. It can be used for confidence estimation and SSL methods using neural networks as backbones, e.g., self-training.
+We provide the implementation of the **$\mathcal{T}$-similarity**, a drop-in replacement of the softmax for confidence estimation under distribution shifts. This novel confidence measure is build upon a diverse ensemble of linear classifiers and corrects the softmax overconfidence while being calibrated. It can be used for confidence estimation and SSL methods using neural networks as backbones, e.g., self-training.
 
 <p align="center">
   <img src="https://github.com/ambroiseodt/tsim/assets/64415312/eeef3f8c-308e-4dd6-af3c-58b943634963" width="600">
@@ -49,7 +49,7 @@ This package consists of several key modules:
 - `notebooks/`: Contains the notebooks to reproduce the figures from the paper;
 - `data/`: Contains the datasets used in our experiments;
 - `src/datasets`: Contains the functions to load datasets and perform the labeling procedure;
-- `src/models/`: Contains all the functions to train diverse ensemble with the $\mathcal{T}$-similarity 
+- `src/models/`: Contains all the functions to train diverse ensemble with the $\mathcal{T}$-similarity
 
 ## Installation
 To get started with $\mathcal{T}$-similarity, clone this repository and install the required packages (requirements.txt coming soon).
