@@ -1,14 +1,10 @@
 r"""
-Trainer to obtain diverse ensembles following Figure 2 of [1].
+Trainer to obtain diverse ensembles in the style of sklearn base_estimator.
 
 [1] A. Odonnat, V. Feofanov, I. Redko. Leveraging Ensemble Diversity
      for Robust Self-Training in the presence of Sample Selection Bias.
      International Conference on Artifical Intelligence and Statistics (AISTATS), 2024
 """
-
-# Author: Ambroise Odonnat <ambroiseodonnattechnologie@gmail.com>
-#
-# License: MIT
 
 # Author: Ambroise Odonnat <ambroiseodonnattechnologie@gmail.com>
 #
@@ -29,6 +25,42 @@ from .utils import EmptyDataset, LabeledDataset, UnlabeledDataset, ForeverDataIt
 
 
 class DiverseEnsembleMLP:
+    r"""A class to fit and predict with a prediction head and diverse ensemble.
+
+    Attributes:
+        dataset_l (LabeledDataset): Labeled training set.
+        dataset_u (UnlabeledDataset): Unlabeled training set.
+        n_classifiers (int): Number of classifiers in the ensemble.
+        num_epochs (int): Number of epochs.
+        learning_rate (float): Learning rate.
+        weight_decay (float): Weight_decay.
+        gamma (float): Parameter that controls the diversity strength.
+        batch_size_l (int): Batch size for the labeled training set.
+        batch_size_u (int): Batch size for the unlabeled training set.
+        n_iters (int): Number of iterations in each epoch.
+        n_jobs (int): Number of threads used for intraop parallelism on CPU.
+        device (torch.device): Device. Defaults="cpu".
+        random_state (int): Seed for reproducibility.
+        verbose (bool): Flag whether to print the evolution of the training.
+        network (nn.Module): Base neural network.
+        optimizer (torch.optim.Optimizer): Optimizer.
+        supervised_loss (nn.Module): Loss for the supervised prediction head.
+        diversity_loss (nn.Module): Diversity loss for the ensemble.
+        t_similarity_function (nn.Module): T-similarity.
+        classwise_t_similarity_function (nn.Module): Classwise T-similarity.
+
+    Methods:
+        fit(x_l, y_l, x_u): Train prediction head on labeled data and
+                            ensemble on labeled and unlabeled data.
+        predict(x): Predict label of input x using the supervised prediction head.
+        predict_proba(x): Predict softmax probabilities of the input x using the
+                          supervised prediction head.
+        predict_t_similarity(x, classwise): Predict the t_similarity of the input x
+                                            using the diverse ensemble. Classwise is
+                                            a flag whether to use the classwise
+                                            version of T-similarity (``True``) or the
+                                            original T-similarity (``False``).
+    """
 
     def __init__(
         self,
@@ -45,7 +77,21 @@ class DiverseEnsembleMLP:
         random_state=None,
         verbose=True,
     ):
-
+        """
+        Args:
+            n_classifiers (int): Number of classifiers in the ensemble.
+            num_epochs (int): Number of epochs.
+            learning_rate (float): Learning rate.
+            n_iters (int): Number of iterations in each epoch.
+            weight_decay (float): Weight_decay.
+            gamma (float): Parameter that controls the diversity strength.
+            batch_size_l (int): Batch size for the labeled training set.
+            batch_size_u (int): Batch size for the unlabeled training set.
+            n_jobs (int): Number of threads used for intraop parallelism on CPU.
+            device (torch.device): Device. Defaults="cpu".
+            random_state (int): Seed for reproducibility.
+            verbose (bool): Flag whether to print the evolution of the training.
+        """
         self.dataset_l = LabeledDataset
         self.dataset_u = UnlabeledDataset
         self.n_classifiers = n_classifiers
@@ -68,7 +114,13 @@ class DiverseEnsembleMLP:
         self.classwise_t_similarity_function = ClasswiseTsimilarity().to(self.device)
 
     def fit(self, x_l: np.array, y_l: np.array, x_u: np.array):
-
+        """Train the prediction head with labeled data and the ensemble with labeled
+        and unlabeled data to promote diverstiy.
+        Args:
+            x_l (np.array): Labeled training data. Shape = (n_l, dimension).
+            x_l (np.array): Corresponding labels. Shape = (n_l, dimension).
+            x_l (np.array): Unlabeled training data. Shape = (n_u, dimension).
+        """
         # Set seed
         if self.random_state is not None:
             torch.manual_seed(self.random_state)
@@ -168,22 +220,54 @@ class DiverseEnsembleMLP:
                 print(f"Loss:{loss:.4f}, Diversity:{diversity_term:.4f}")
 
     def predict(self, x: np.array):
+        """Predict with the supervised prediction head label of an input x.
+
+        Args:
+            x (np.array): Input data. Shape = (n_samples, dimension).
+
+        Returns:
+            predicted_label (np.array): Predicted label. Shape = (n_samples,)
+        """
         x = torch.FloatTensor(x).to(self.device)
         with torch.no_grad():
             output_pred_head, _ = self.network(x)
             out = output_pred_head.cpu().numpy()
+        predicted_label = out.argmax(axis=-1)
 
-        return out.argmax(axis=-1)
+        return predicted_label
 
     def predict_proba(self, x: np.array):
+        """Predict with the supervised prediction head the probability
+        distribution on the classes for an input x.
+
+        Args:
+            x (np.array): Input data. Shape = (n_samples, dimension).
+
+        Returns:
+            predicted_proba (np.array): Predicted probability distribution on the classes.
+                                        Shape = (n_samples, n_classes)
+        """
         x = torch.FloatTensor(x).to(self.device)
         with torch.no_grad():
             output_pred_head, _ = self.network(x)
             out = output_pred_head.cpu().numpy()
+        predicted_proba = softmax(out, axis=-1)
 
-        return softmax(out, axis=-1)
+        return predicted_proba
 
     def predict_t_similarity(self, x: np.array, classwise=False):
+        """Predict T-similarity of an input x with the ensemble heads.
+
+        Args:
+            x (np.array): Input data.
+            classwise (bool): Flag whether to use the classwise version of the
+                              T-similarity (``True``) or the original one (``False``).
+
+        Returns:
+            tsim (np.array): T-similarity of an input x.
+                             If classwise is False, shape = (n_samples, ).
+                             Otherwise, shape = (n_samples, n_classes).
+        """
         x = torch.FloatTensor(x).to(self.device)
         if classwise:
             t_similarity_function = self.classwise_t_similarity_function
@@ -193,5 +277,6 @@ class DiverseEnsembleMLP:
         with torch.no_grad():
             _, outputs_ensemble_heads = self.network(x)
             tsim = t_similarity_function(*outputs_ensemble_heads)
+        tsim = tsim.cpu().numpy()
 
-        return tsim.cpu().numpy()
+        return tsim
