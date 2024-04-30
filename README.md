@@ -52,7 +52,10 @@ This package consists of several key modules:
 - `src/models/`: Contains all the functions to train diverse ensemble with the $\mathcal{T}$-similarity
 
 ## Installation
-To get started with $\mathcal{T}$-similarity, clone this repository and install the required packages (requirements.txt coming soon).
+> [!WARNING]
+> A clean requirements.txt file will be added soon.
+
+To get started with $\mathcal{T}$-similarity, clone this repository and install the required packages.
 
 ```bash
 git clone https://github.com/ambroiseodt/tsim.git
