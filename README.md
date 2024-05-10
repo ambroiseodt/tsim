@@ -33,6 +33,18 @@ We provide the PyTorch implementation of the $\mathcal{T}$-similarity and the co
 - In practice, we use $M=5$ heads resulting in lightweight and fast training;
 - Compatible to any SSL methods using neural networks as backbones.
 
+## Installation
+
+Using pip:
+```bash
+pip install git+https://github.com/ambroiseodt/tsim.git#egg=tsim
+```
+
+Or clonning:
+```bash
+git clone https://github.com/ambroiseodt/tsim.git
+```
+
 ## Examples
 We provide demos in `notebooks/` to take in hand the implementation and reproduce the figures of the [paper](https://arxiv.org/pdf/2310.14814):
 - `plot_intro_figure.ipynb`: Overview of the method (Figure 1)
@@ -99,13 +111,12 @@ This package consists of several key modules:
 - Self-training algorithms
 - Extended requirements.txt
 
-## Installation
+## Contributing
 To get started with the $\mathcal{T}$-similarity, clone this repository and install the required packages using:
 
 ```bash
 git clone https://github.com/ambroiseodt/tsim.git
-cd tsim
-pip install -r requirements.txt
+pip install -e .
 ```
 Please, make sure you have Python 3.8 or a newer version installed.
 
