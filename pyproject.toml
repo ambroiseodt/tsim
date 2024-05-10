@@ -22,6 +22,9 @@ keywords = [
 [project.urls]
 Source = "https://github.com/ambroiseodt/tsim"
 
+[project.optional-dependencies]
+dev = ['pytest']
+
 [tool.setuptools]
 license-files = ['LICEN[CS]E*', 'COPYING*', 'NOTICE*', 'AUTHORS*']
 

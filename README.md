@@ -116,7 +116,7 @@ To get started with the $\mathcal{T}$-similarity, clone this repository and inst
 
 ```bash
 git clone https://github.com/ambroiseodt/tsim.git
-pip install -e .
+pip install -e .[dev]
 ```
 Please, make sure you have Python 3.8 or a newer version installed.
 
