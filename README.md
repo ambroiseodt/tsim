@@ -43,8 +43,8 @@ The code below (in `demo.ipynb`) gives an example of how to train the architectu
 ```python
 import sys
 sys.path.append("..")
-from src.datasets.read_dataset import RealDataSet
-from src.models.diverse_ensemble import DiverseEnsembleMLP
+from tsim.datasets.read_dataset import RealDataSet
+from tsim.models.diverse_ensemble import DiverseEnsembleMLP
 
 dataset_name = "mnist"
 gamma = 1
@@ -89,8 +89,8 @@ lab_size = nb_lab_samples_per_class * ratio
 This package consists of several key modules:
 - `notebooks/`: Contains the notebooks to reproduce the figures from the paper;
 - `data/`: Contains the datasets used in our experiments;
-- `src/datasets`: Contains the functions to load datasets and perform the labeling procedure;
-- `src/models/`: Contains all the functions to train diverse ensembles with the $\mathcal{T}$-similarity
+- `tsim/datasets`: Contains the functions to load datasets and perform the labeling procedure;
+- `tsim/models/`: Contains all the functions to train diverse ensembles with the $\mathcal{T}$-similarity
 
 ## Coming soon
 > [!WARNING]
