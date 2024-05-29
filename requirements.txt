@@ -3,4 +3,4 @@ numpy
 scipy
 scikit-learn
 seaborn
-# torch
+torch
