@@ -40,7 +40,7 @@ Using pip:
 pip install git+https://github.com/ambroiseodt/tsim.git#egg=tsim
 ```
 
-Or clonning:
+Or cloning:
 ```bash
 git clone https://github.com/ambroiseodt/tsim.git
 ```
