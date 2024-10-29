@@ -1,7 +1,8 @@
 # $\mathcal{T}$-similarity (AISTATS'24)
 **This repository contains the official implementation of T-similarity, a novel confidence estimation measure robust to distribution shifts introduced in** 
 
->[Leveraging Ensemble Diversity for Robust Self-Training in the Presence of Sample Selection Bias](https://arxiv.org/pdf/2310.14814). Ambroise Odonnat, Vasilii Feofanov, Ievgen Redko.
+>[Leveraging Ensemble Diversity for Robust Self-Training in the Presence of Sample Selection Bias](https://arxiv.org/pdf/2310.14814).
+><br/>Ambroise Odonnat, Vasilii Feofanov, Ievgen Redko.
 
 ## Overview
 We provide the implementation of the **$\mathcal{T}$-similarity**, a drop-in replacement of the softmax for confidence estimation under distribution shifts. This novel confidence measure is build upon a diverse ensemble of linear classifiers and corrects the softmax overconfidence while being calibrated. It can be used for confidence estimation and SSL methods using neural networks as backbones, e.g., self-training.
