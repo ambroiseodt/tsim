@@ -43,6 +43,8 @@ pip install git+https://github.com/ambroiseodt/tsim.git#egg=tsim
 Or cloning:
 ```bash
 git clone https://github.com/ambroiseodt/tsim.git
+cd tsim
+pip install -r requirements.txt
 ```
 
 ## Examples
