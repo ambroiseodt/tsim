@@ -38,7 +38,7 @@ We provide the PyTorch implementation of the $\mathcal{T}$-similarity and the co
 
 ## Installation
 Please, make sure you have Python 3.8 or a newer version installed.
-To get started with the $\mathcal{T}$-similarity, clone this repository and install the required packages by:
+To get started with the $\mathcal{T}$-similarity, install the required packages by:
 
 Using pip:
 ```bash
