@@ -1,5 +1,7 @@
-# $\mathcal{T}$-similarity
-**This is the official implementation of [Leveraging Ensemble Diversity for Robust Self-Training in the Presence of Sample Selection Bias](https://arxiv.org/pdf/2310.14814), AISTATS 2024.**
+# $\mathcal{T}$-similarity (AISTATS'24)
+**This repository contains the official implementation of T-similarity, a novel confidence estimation measure robust to distribution shifts introduced in** 
+
+>[Leveraging Ensemble Diversity for Robust Self-Training in the Presence of Sample Selection Bias](https://arxiv.org/pdf/2310.14814). Ambroise Odonnat, Vasilii Feofanov, Ievgen Redko.
 
 ## Overview
 We provide the implementation of the **$\mathcal{T}$-similarity**, a drop-in replacement of the softmax for confidence estimation under distribution shifts. This novel confidence measure is build upon a diverse ensemble of linear classifiers and corrects the softmax overconfidence while being calibrated. It can be used for confidence estimation and SSL methods using neural networks as backbones, e.g., self-training.
@@ -34,6 +36,8 @@ We provide the PyTorch implementation of the $\mathcal{T}$-similarity and the co
 - Compatible to any SSL methods using neural networks as backbones.
 
 ## Installation
+Please, make sure you have Python 3.8 or a newer version installed.
+To get started with the $\mathcal{T}$-similarity, clone this repository and install the required packages by:
 
 Using pip:
 ```bash
@@ -44,7 +48,7 @@ Or cloning:
 ```bash
 git clone https://github.com/ambroiseodt/tsim.git
 cd tsim
-pip install -r requirements.txt
+pip install -e .[dev]
 ```
 
 ## Examples
@@ -113,22 +117,13 @@ This package consists of several key modules:
 - Self-training algorithms
 - Extended requirements.txt
 
-## Contributing
-To get started with the $\mathcal{T}$-similarity, clone this repository and install the required packages using:
-
-```bash
-git clone https://github.com/ambroiseodt/tsim.git
-pip install -e .[dev]
-```
-Please, make sure you have Python 3.8 or a newer version installed.
-
 ## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
+This project is licensed under the MIT License.
 
-## Authors
-[Ambroise Odonnat](https://ambroiseodt.github.io/)
+## Author
+- [Ambroise Odonnat](https://ambroiseodt.github.io/)
 
-## Cite us
+## Citation
 If you use our code in your research,  please cite:
 
 ```
