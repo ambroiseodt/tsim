@@ -38,14 +38,12 @@ We provide the PyTorch implementation of the $\mathcal{T}$-similarity and the co
 
 ## Installation
 Please, make sure you have Python 3.8 or a newer version installed.
-To get started with the $\mathcal{T}$-similarity, install the required packages by:
-
-Using pip:
+To get started with the $\mathcal{T}$-similarity, you can install the library with pip:
 ```bash
 pip install git+https://github.com/ambroiseodt/tsim.git#egg=tsim
 ```
 
-Or cloning:
+If you want to contribute, you can clone the repository and install the packages as follows:
 ```bash
 git clone https://github.com/ambroiseodt/tsim.git
 cd tsim
