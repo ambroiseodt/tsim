@@ -109,13 +109,6 @@ This package consists of several key modules:
 - `tsim/datasets`: Contains the functions to load datasets and perform the labeling procedure;
 - `tsim/models/`: Contains all the functions to train diverse ensembles with the $\mathcal{T}$-similarity
 
-## Coming soon
-> [!WARNING]
-> The code is still in development and we will add the following components very soon:
-- Visualization of ECE for softmax and $\mathcal{T}$-similarity (Figure 5)
-- Self-training algorithms
-- Extended requirements.txt
-
 ## License
 This project is licensed under the MIT License.
 
@@ -123,7 +116,7 @@ This project is licensed under the MIT License.
 - [Ambroise Odonnat](https://ambroiseodt.github.io/)
 
 ## Citation
-If you use our code in your research,  please cite:
+If you find this work useful in your research, please cite:
 
 ```
 @InProceedings{pmlr-v238-odonnat24a,
