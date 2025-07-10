@@ -1,7 +1,6 @@
 # $\mathcal{T}$-similarity (AISTATS'24)
 **This repository contains the official implementation of T-similarity, a novel confidence estimation measure robust to distribution shifts introduced in** 
 
-
 >[Leveraging Ensemble Diversity for Robust Self-Training in the Presence of Sample Selection Bias](https://arxiv.org/pdf/2310.14814).
 ><br/>Ambroise Odonnat, Vasilii Feofanov, Ievgen Redko.
 
